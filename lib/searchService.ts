@@ -65,9 +65,9 @@ export async function searchForCareerContent(
       includeAnswer: false,
     });
     
-    // Add 3 second timeout for search
+    // Add 2 second timeout for search
     const timeoutPromise = new Promise((_, reject) => 
-      setTimeout(() => reject(new Error('Search timeout')), 3000)
+      setTimeout(() => reject(new Error('Search timeout')), 2000)
     );
     
     const response = await Promise.race([searchPromise, timeoutPromise]) as any;

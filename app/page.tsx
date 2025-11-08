@@ -266,51 +266,65 @@ export default function DifficultySelectionPage() {
   };
 
   return (
-    <div className="h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center p-2 sm:p-3 md:p-4 overflow-hidden">
+    <div className="h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center p-4 sm:p-6 overflow-hidden">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-6xl h-full flex flex-col"
+        className="w-full max-w-5xl h-full max-h-[95vh] flex flex-col justify-center py-6"
       >
-        {/* Header - 15% height */}
-        <div className="text-center flex-shrink-0" style={{ height: '15%', minHeight: '80px', maxHeight: '120px' }}>
+        {/* Header */}
+        <div className="text-center mb-6 flex-shrink-0">
           <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.1 }}
+            className="inline-flex items-center justify-center mb-3">
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 blur-xl opacity-20 rounded-full"></div>
+              <GraduationCap className="w-12 h-12 sm:w-14 sm:h-14 text-blue-600 relative" strokeWidth={1.5} />
+            </div>
+          </motion.div>
+          
+          <motion.h1
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="relative inline-block h-full flex flex-col justify-center"
+            transition={{ delay: 0.2 }}
+            className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2"
           >
-            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-slate-700 via-slate-800 to-slate-700 mb-1 sm:mb-1.5 md:mb-2 animate-gradient bg-[length:200%_auto]">
-              Start Your Mock Test
-            </h1>
-            {/* Decorative underline */}
-            <motion.div
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ delay: 0.3, duration: 0.6, ease: "easeOut" }}
-              className="h-0.5 sm:h-1 bg-gradient-to-r from-slate-400 via-slate-500 to-slate-400 rounded-full mx-auto"
-              style={{ width: '60%', transformOrigin: 'center' }}
-            />
-            <p className="text-gray-600 text-xs sm:text-sm md:text-base mt-1 sm:mt-1.5 md:mt-2 font-medium">
-              Choose your career path and expertise level to begin
-            </p>
-          </motion.div>
+            <span className="bg-gradient-to-r from-slate-800 via-blue-700 to-indigo-700 bg-clip-text text-transparent">
+              Mock Test Platform
+            </span>
+          </motion.h1>
+          
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="text-slate-600 text-sm sm:text-base max-w-2xl mx-auto font-medium"
+          >
+            Test your skills with AI-generated questions tailored to your career path
+          </motion.p>
         </div>
 
-        {/* Content Area - 70% height split between two sections */}
-        <div className="flex-1 flex flex-col" style={{ height: '70%' }}>
-          {/* Career Path Selection - 40% of content area */}
+        {/* Content Container */}
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/20 p-5 sm:p-6 flex-1 mb-5">
+          {/* Career Path Selection */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="bg-white rounded-lg md:rounded-xl shadow-lg p-2 sm:p-2.5 md:p-3 mb-2 sm:mb-2.5 md:mb-3"
-            style={{ height: '40%', minHeight: '140px' }}
+            transition={{ delay: 0.4 }}
+            className="mb-5"
           >
-            <h2 className="text-sm sm:text-base md:text-lg font-semibold text-gray-800 mb-1.5 sm:mb-2">
-              1. Career Path <span className="text-red-500">*</span>
-            </h2>
-            <div className="relative h-[calc(100%-2rem)]">
+            <div className="flex items-center gap-2.5 mb-3">
+              <div className="w-7 h-7 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-xs shadow-lg">
+                1
+              </div>
+              <h2 className="text-lg sm:text-xl font-bold text-slate-800">
+                Select Your Career Path
+              </h2>
+            </div>
+            
+            <div className="relative">
               <input
                 type="text"
                 value={careerPathInput}
@@ -329,8 +343,8 @@ export default function DifficultySelectionPage() {
                 onBlur={() => {
                   setTimeout(() => setShowSuggestions(false), 200);
                 }}
-                placeholder="Type your career path (e.g., Software Development, Data Science)"
-                className="w-full px-2.5 sm:px-3 md:px-3.5 py-1.5 sm:py-2 md:py-2.5 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:outline-none transition-colors text-gray-700 bg-white text-xs sm:text-sm md:text-base"
+                placeholder="e.g., Software Development, Data Science..."
+                className="w-full px-4 py-2.5 border-2 border-slate-200 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all text-slate-700 bg-white text-sm placeholder:text-slate-400 shadow-sm"
               />
               
               {/* Suggestions Dropdown */}
@@ -338,8 +352,8 @@ export default function DifficultySelectionPage() {
                 <motion.div
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="absolute z-10 w-full mt-1 bg-white border-2 border-gray-200 rounded-lg shadow-lg overflow-y-auto"
-                  style={{ maxHeight: '150px' }}
+                  className="absolute z-10 w-full mt-2 bg-white border-2 border-slate-200 rounded-xl shadow-2xl overflow-hidden"
+                  style={{ maxHeight: '180px', overflowY: 'auto' }}
                 >
                   {filteredCareers.map((career, index) => (
                     <button
@@ -349,7 +363,7 @@ export default function DifficultySelectionPage() {
                         e.preventDefault();
                         handleSelectCareer(career);
                       }}
-                      className="w-full text-left px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 hover:bg-blue-50 transition-colors text-gray-700 text-xs sm:text-sm md:text-base border-b border-gray-100 last:border-b-0 cursor-pointer"
+                      className="w-full text-left px-4 py-2 hover:bg-blue-50 active:bg-blue-100 transition-colors text-slate-700 text-sm border-b border-slate-100 last:border-b-0 cursor-pointer font-medium"
                     >
                       {career}
                     </button>
@@ -357,26 +371,31 @@ export default function DifficultySelectionPage() {
                 </motion.div>
               )}
               
-              {/* Helper text */}
-              <p className="text-[10px] sm:text-xs md:text-sm text-gray-500 mt-1 sm:mt-1.5">
-                Start typing to see suggestions, or enter your own career path
+              <p className="text-xs text-slate-500 mt-2 flex items-center gap-1.5">
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Type to search from {careerOptions.length}+ options
               </p>
             </div>
           </motion.div>
 
-          {/* Difficulty Selection - 60% of content area */}
+          {/* Difficulty Selection */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="bg-white rounded-lg md:rounded-xl shadow-lg p-2 sm:p-2.5 md:p-3 flex flex-col"
-            style={{ height: '60%', minHeight: '200px' }}
+            transition={{ delay: 0.5 }}
           >
-            <h2 className="text-sm sm:text-base md:text-lg font-semibold text-gray-800 mb-1.5 sm:mb-2 md:mb-2.5 flex-shrink-0">
-              2. Select Your Expertise <span className="text-red-500">*</span>
-            </h2>
+            <div className="flex items-center gap-2.5 mb-3">
+              <div className="w-7 h-7 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-xs shadow-lg">
+                2
+              </div>
+              <h2 className="text-lg sm:text-xl font-bold text-slate-800">
+                Choose Difficulty Level
+              </h2>
+            </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-2.5 md:gap-3 flex-1">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {difficultyOptions.map((option, index) => {
               const Icon = option.icon;
               const isSelected = selectedDifficulty === option.level;
@@ -386,26 +405,43 @@ export default function DifficultySelectionPage() {
                   key={option.level}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 + index * 0.1 }}
+                  transition={{ delay: 0.6 + index * 0.1 }}
                   onClick={() => setSelectedDifficulty(option.level)}
-                  className={`relative p-2.5 sm:p-3 md:p-4 rounded-lg md:rounded-xl border-2 transition-all duration-300 group ${
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  className={`relative p-4 rounded-xl border-2 transition-all duration-300 group ${
                     isSelected
-                      ? `${option.borderColor} bg-white shadow-lg scale-[1.02]`
-                      : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-md'
+                      ? `${option.borderColor} bg-gradient-to-br ${option.gradientColor} shadow-lg`
+                      : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-md'
                   }`}
                 >
                   {/* Icon */}
-                  <div className="mb-2 sm:mb-3 md:mb-4">
-                    <Icon className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 mx-auto text-gray-700" strokeWidth={1.5} />
+                  <div className="mb-2.5">
+                    <div className={`inline-flex p-2.5 rounded-lg transition-all duration-300 ${
+                      isSelected 
+                        ? 'bg-white/20 backdrop-blur-sm' 
+                        : 'bg-slate-50 group-hover:bg-slate-100'
+                    }`}>
+                      <Icon 
+                        className={`w-8 h-8 transition-colors ${
+                          isSelected ? 'text-white' : 'text-slate-700'
+                        }`} 
+                        strokeWidth={1.8}
+                      />
+                    </div>
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-xs sm:text-sm md:text-base lg:text-lg font-bold text-gray-800 mb-1 sm:mb-1.5 md:mb-2">
+                  <h3 className={`text-base sm:text-lg font-bold mb-1.5 transition-colors ${
+                    isSelected ? 'text-white' : 'text-slate-800'
+                  }`}>
                     {option.title}
                   </h3>
 
                   {/* Description */}
-                  <p className="text-gray-600 text-[10px] sm:text-xs md:text-sm leading-relaxed">
+                  <p className={`text-xs leading-relaxed transition-colors ${
+                    isSelected ? 'text-white/90' : 'text-slate-600'
+                  }`}>
                     {option.description}
                   </p>
 
@@ -415,9 +451,9 @@ export default function DifficultySelectionPage() {
                       initial={{ scale: 0, rotate: -180 }}
                       animate={{ scale: 1, rotate: 0 }}
                       transition={{ type: 'spring', stiffness: 200, damping: 15 }}
-                      className={`absolute -top-1.5 sm:-top-2 -right-1.5 sm:-right-2 w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 lg:w-9 lg:h-9 bg-gradient-to-br ${option.gradientColor} rounded-full flex items-center justify-center shadow-lg`}
+                      className="absolute -top-2 -right-2 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-lg"
                     >
-                      <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 lg:w-5 lg:h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg className="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                       </svg>
                     </motion.div>
@@ -429,37 +465,47 @@ export default function DifficultySelectionPage() {
           </motion.div>
         </div>
 
-        {/* Continue Button - 15% height */}
+        {/* Error Message & Continue Button - Outside card */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.8 }}
-          className="flex flex-col items-center justify-center gap-2 flex-shrink-0"
-          style={{ height: '15%', minHeight: '80px', maxHeight: '120px' }}
+          transition={{ delay: 0.9 }}
+          className="flex flex-col items-center gap-3 flex-shrink-0 min-h-[100px] justify-end"
         >
           {/* Error Message */}
           {error && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="px-3 sm:px-4 py-2 sm:py-2.5 bg-red-50 border-2 border-red-200 rounded-lg text-red-700 font-medium text-xs sm:text-sm md:text-base"
+              className="w-full max-w-md px-4 py-2.5 bg-red-50 border-2 border-red-200 rounded-xl text-red-700 font-medium text-sm flex items-center gap-2 shadow-lg"
             >
+              <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
               {error}
             </motion.div>
           )}
 
+          {/* Continue Button */}
           <motion.button
             onClick={handleContinue}
             disabled={isButtonClicked}
-            className="relative px-8 py-2 sm:px-10 sm:py-2.5 md:px-12 md:py-3 lg:py-3.5 rounded-full text-sm sm:text-base md:text-lg font-semibold transition-all duration-300 bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:shadow-xl hover:scale-105 overflow-hidden disabled:opacity-90 disabled:cursor-wait"
+            whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
+            className="relative px-10 sm:px-14 py-3 rounded-xl text-base font-bold transition-all duration-300 bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:shadow-2xl hover:from-blue-700 hover:to-indigo-700 disabled:opacity-90 disabled:cursor-wait overflow-hidden group"
           >
+            {/* Shimmer effect */}
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent transform -skew-x-12 animate-shimmer"></div>
+            </div>
+            
             <motion.span 
               className="relative z-10 inline-flex items-center gap-2"
               animate={isButtonClicked ? { opacity: 0 } : { opacity: 1 }}
               transition={{ duration: 0.4 }}
             >
               Continue
+              <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
             </motion.span>
             
             {/* Animated Arrow with Glow Effect */}
@@ -495,7 +541,7 @@ export default function DifficultySelectionPage() {
                     }}
                     className="absolute inset-0 flex items-center justify-center"
                   >
-                    <ArrowRight className="w-7 h-7 md:w-8 md:h-8 text-white drop-shadow-lg" strokeWidth={3} />
+                    <ArrowRight className="w-6 h-6 text-white drop-shadow-lg" strokeWidth={3} />
                   </motion.div>
                 </>
               )}

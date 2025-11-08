@@ -40,6 +40,7 @@ export default function QuizPage() {
   const getQuestionTimeLimit = () => {
     switch (difficulty) {
       case 'beginner':
+        return 30; // 30 seconds for beginners
       case 'intermediate':
         return 45; // 45 seconds
       case 'advanced':
@@ -240,13 +241,23 @@ export default function QuizPage() {
     setError(null);
 
     try {
+      // Add timestamp and random parameter to prevent caching
+      const timestamp = Date.now();
+      const random = Math.random();
+      
       const response = await fetch('/api/generate-questions', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache'
+        },
         body: JSON.stringify({
           careerPath: careerPath,
           difficulty,
           count: 15,
+          timestamp, // Add timestamp to force unique requests
+          random, // Add random to ensure uniqueness
         }),
       });
 

@@ -50,7 +50,7 @@ export const useQuizStore = create<QuizState>((set) => ({
   isLoading: false,
   error: null,
 
-  setDifficulty: (difficulty) => set({ difficulty, questions: [], answers: {}, currentQuestionIndex: 0, startTime: null }),
+  setDifficulty: (difficulty) => set({ difficulty, questions: [], answers: {}, currentQuestionIndex: 0, startTime: null, isLoading: false, error: null }),
   setCareerPath: (careerPath) => set({ careerPath }),
   setQuestions: (questions) => set({ questions }),
   setAnswer: (questionId, answer) =>

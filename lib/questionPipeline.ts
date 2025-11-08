@@ -1,6 +1,7 @@
 import { ChatGroq } from '@langchain/groq';
 import { PromptTemplate } from '@langchain/core/prompts';
 import { Question, DifficultyLevel } from './store';
+import { searchForCareerContent, getDifficultyFocus, generateUniqueSeed } from './searchService';
 
 const MAX_RETRIES = 2;
 const RETRY_DELAY = 500;
@@ -21,7 +22,7 @@ class QuestionGenerationPipeline {
       
       this.llm = new ChatGroq({
         apiKey: apiKey,
-        model: 'llama-3.1-70b-versatile', // Faster model
+        model: 'llama-3.3-70b-versatile', // Current supported model
         temperature: 0.8, // Balanced temperature
         maxTokens: 4096, // Limit tokens for faster response
       });
@@ -32,16 +33,19 @@ class QuestionGenerationPipeline {
 
     // Create prompt template for question generation
     this.promptTemplate = PromptTemplate.fromTemplate(`
-You are an expert quiz creator. Generate {count} multiple choice questions for {difficulty} level on "{careerPath}".
+You are an expert quiz creator. Generate {count} unique multiple choice questions for {difficulty} level on "{careerPath}".
+
+{difficultyFocus}
+
+{webContext}
 
 Question Requirements:
-- {difficulty} level appropriate:
-  * Beginner: Basic concepts and terminology
-  * Intermediate: Practical applications and common tools
-  * Advanced: Complex scenarios and best practices
+- {difficulty} level appropriate
 - Each question: 4 options (A, B, C, D)
 - Career-relevant to {careerPath}
 - Clear and unambiguous
+- Based on current industry standards and practices
+- Ensure variety in topics and question types
 
 Return ONLY valid JSON array:
 [
@@ -59,6 +63,7 @@ Return ONLY valid JSON array:
 ]
 
 No markdown, no explanations. JSON only.
+Unique Seed: {seed}
     `);
   }
 
@@ -119,29 +124,36 @@ No markdown, no explanations. JSON only.
   ): Promise<Question[]> {
     let lastError: Error | null = null;
 
-    // Add timestamp to ensure uniqueness
-    const timestamp = Date.now();
+    // Search web for career-specific content
+    console.log(`Searching web for ${difficulty} level ${careerPath} content...`);
+    const webContext = await searchForCareerContent(careerPath, difficulty);
+    
+    // Get difficulty-specific focus
+    const difficultyFocus = getDifficultyFocus(difficulty);
+    
+    // Generate unique seed for variety
+    const seed = generateUniqueSeed();
 
     for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
       try {
         console.log(`Generating questions (attempt ${attempt}/${MAX_RETRIES})...`);
 
-        // Format the prompt with timestamp for variety
+        // Format the prompt with web context and difficulty focus
         const prompt = await this.promptTemplate.format({
           careerPath,
           difficulty,
           count: count.toString(),
+          difficultyFocus,
+          webContext: webContext ? `\nWeb Search Results (use as reference for current, real-world content):\n${webContext}\n` : '',
+          seed,
         });
-
-        // Add a randomization instruction with career context
-        const finalPrompt = `${prompt}\n\nGenerate ${count} unique questions about ${careerPath}.`;
 
         // Call LLM with timeout
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT);
 
         try {
-          const response = await this.llm.invoke(finalPrompt, {
+          const response = await this.llm.invoke(prompt, {
             signal: controller.signal,
           });
           clearTimeout(timeoutId);
@@ -157,7 +169,7 @@ No markdown, no explanations. JSON only.
             console.warn(`Expected ${count} questions, got ${questions.length}. Accepting partial result.`);
           }
 
-          console.log(`Successfully generated ${questions.length} questions`);
+          console.log(`Successfully generated ${questions.length} questions with web-informed content`);
           return questions;
         } catch (error) {
           clearTimeout(timeoutId);

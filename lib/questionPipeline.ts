@@ -5,7 +5,7 @@ import { searchForCareerContent, getDifficultyFocus, generateUniqueSeed } from '
 
 const MAX_RETRIES = 2;
 const RETRY_DELAY = 500;
-const REQUEST_TIMEOUT = 25000; // 25 seconds
+const REQUEST_TIMEOUT = 15000; // 15 seconds (plenty for 8B model)
 
 class QuestionGenerationPipeline {
   private llm: ChatGroq;
@@ -22,9 +22,9 @@ class QuestionGenerationPipeline {
       
       this.llm = new ChatGroq({
         apiKey: apiKey,
-        model: 'llama-3.3-70b-versatile', // Current supported model
-        temperature: 0.7, // Slightly lower for faster generation
-        maxTokens: 2200, // Further reduced for faster response
+        model: 'llama-3.1-8b-instant', // Ultra-fast model for quiz generation
+        temperature: 0.7,
+        maxTokens: 2000, // Optimized for speed
       });
     } catch (error) {
       console.error('Failed to initialize Groq LLM:', error);

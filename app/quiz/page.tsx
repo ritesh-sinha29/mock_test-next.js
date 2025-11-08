@@ -118,7 +118,20 @@ export default function QuizPage() {
   // Function to start quiz in fullscreen (triggered by user click)
   const handleStartQuizFullscreen = async () => {
     setShowFullscreenPrompt(false);
-    await enterFullscreen();
+    
+    try {
+      // Enter fullscreen - MUST be called directly from user interaction
+      if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
+        await document.documentElement.requestFullscreen();
+        if (!isFullscreen) {
+          toggleFullscreen();
+        }
+      }
+    } catch (err) {
+      console.warn('Fullscreen not supported or denied:', err);
+      // Continue without fullscreen if it fails
+    }
+    
     // Request wake lock to keep screen on
     requestWakeLock();
     // Start quiz timer
@@ -203,20 +216,24 @@ export default function QuizPage() {
           setFullscreenExitAttempts(1);
           setShowExitWarning(true);
           
-          // Immediately try to re-enter fullscreen
-          // This works because the change event is close enough to user action
+          // Try to re-enter fullscreen after a short delay
           setTimeout(async () => {
             try {
-              await document.documentElement.requestFullscreen();
-              setShowExitWarning(false);
-              if (!isFullscreen) {
-                toggleFullscreen();
+              if (document.documentElement.requestFullscreen) {
+                await document.documentElement.requestFullscreen();
+                setShowExitWarning(false);
+                if (!isFullscreen) {
+                  toggleFullscreen();
+                }
               }
             } catch (err) {
-              // If auto re-entry fails, keep warning visible
-              console.warn('Could not auto re-enter fullscreen');
+              // If auto re-entry fails, keep warning visible for 3 seconds then continue
+              console.warn('Could not auto re-enter fullscreen:', err);
+              setTimeout(() => {
+                setShowExitWarning(false);
+              }, 3000);
             }
-          }, 100); // Very short delay
+          }, 100);
         } 
         // Second attempt - end test
         else {

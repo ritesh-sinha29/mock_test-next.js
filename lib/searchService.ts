@@ -1,6 +1,6 @@
 import { tavily } from '@tavily/core';
 
-const MAX_SEARCH_RESULTS = 5;
+const MAX_SEARCH_RESULTS = 2;
 
 interface SearchResult {
   title: string;
@@ -58,12 +58,19 @@ export async function searchForCareerContent(
     
     console.log(`Searching web for: "${searchQuery}"`);
 
-    // Perform search
-    const response = await tvly.search(searchQuery, {
+    // Perform search with timeout
+    const searchPromise = tvly.search(searchQuery, {
       maxResults: MAX_SEARCH_RESULTS,
       searchDepth: 'basic',
       includeAnswer: false,
     });
+    
+    // Add 3 second timeout for search
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('Search timeout')), 3000)
+    );
+    
+    const response = await Promise.race([searchPromise, timeoutPromise]) as any;
 
     if (!response.results || response.results.length === 0) {
       console.warn('No search results found');
@@ -92,6 +99,7 @@ export async function searchForCareerContent(
  */
 export function generateUniqueSeed(): string {
   const timestamp = Date.now();
-  const randomNum = Math.floor(Math.random() * 1000000);
-  return `${timestamp}-${randomNum}`;
+  const randomNum = Math.floor(Math.random() * 10000000);
+  const randomChars = Math.random().toString(36).substring(2, 8);
+  return `${timestamp}-${randomNum}-${randomChars}`;
 }

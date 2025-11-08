@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getQuestionPipeline } from '@/lib/questionPipeline';
 import { DifficultyLevel } from '@/lib/store';
 
+// Disable caching to ensure fresh questions every time
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -37,6 +41,11 @@ export async function POST(request: NextRequest) {
         success: true,
         questions,
         count: questions.length,
+      }, {
+        headers: {
+          'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+          'Pragma': 'no-cache',
+        },
       });
     } catch (generationError) {
       console.error('Question generation failed, using fallback:', generationError);

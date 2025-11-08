@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Users, GraduationCap, Trophy, ArrowRight, TrendingUp, Award, BarChart3 } from 'lucide-react';
+import { Users, GraduationCap, Trophy, ArrowRight, TrendingUp, Award, BarChart3, BookOpen, Zap, Crown } from 'lucide-react';
 import { useQuizStore, DifficultyLevel } from '@/lib/store';
 
 const careerOptions = [
@@ -179,30 +179,30 @@ const difficultyOptions = [
     icon: BarChart3,
     title: 'Beginner',
     description: 'Fundamental concepts and basic knowledge',
-    gradientColor: 'from-emerald-500 to-teal-600',
-    iconColor: 'text-emerald-600',
+    gradientColor: 'from-emerald-400 to-emerald-600',
+    iconColor: 'text-white',
     borderColor: 'border-emerald-500',
-    shadowColor: 'shadow-emerald-200',
+    glowColor: 'emerald-400',
   },
   {
     level: 'intermediate' as DifficultyLevel,
     icon: TrendingUp,
     title: 'Intermediate',
     description: 'Practical applications and real-world scenarios',
-    gradientColor: 'from-blue-500 to-indigo-600',
-    iconColor: 'text-blue-600',
+    gradientColor: 'from-blue-400 to-blue-600',
+    iconColor: 'text-white',
     borderColor: 'border-blue-500',
-    shadowColor: 'shadow-blue-200',
+    glowColor: 'blue-400',
   },
   {
     level: 'advanced' as DifficultyLevel,
     icon: Award,
     title: 'Advanced',
     description: 'Complex problem-solving and expertise',
-    gradientColor: 'from-violet-500 to-purple-600',
-    iconColor: 'text-violet-600',
+    gradientColor: 'from-violet-400 to-violet-600',
+    iconColor: 'text-white',
     borderColor: 'border-violet-500',
-    shadowColor: 'shadow-violet-200',
+    glowColor: 'violet-400',
   },
 ];
 
@@ -394,49 +394,9 @@ export default function DifficultySelectionPage() {
                       : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-md'
                   }`}
                 >
-                  {/* Unique Icon Design - Hexagon with Gradient Border */}
-                  <div className="relative w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 mx-auto mb-1.5 sm:mb-2 md:mb-2.5">
-                    {/* Outer Hexagon Border */}
-                    <div className={`absolute inset-0 transition-all duration-300 ${
-                      isSelected ? 'scale-110 rotate-12' : 'group-hover:scale-105 group-hover:rotate-6'
-                    }`}
-                      style={{
-                        clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)'
-                      }}
-                    >
-                      <div className={`w-full h-full bg-gradient-to-br ${option.gradientColor} opacity-20`} />
-                    </div>
-                    
-                    {/* Middle Hexagon */}
-                    <div className={`absolute inset-[3px] bg-white transition-all duration-300 ${
-                      isSelected ? 'scale-110 rotate-12' : 'group-hover:scale-105 group-hover:rotate-6'
-                    }`}
-                      style={{
-                        clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)'
-                      }}
-                    />
-                    
-                    {/* Inner Hexagon Border */}
-                    <div className={`absolute inset-[6px] transition-all duration-300 ${
-                      isSelected ? 'scale-110 rotate-12' : 'group-hover:scale-105 group-hover:rotate-6'
-                    }`}
-                      style={{
-                        clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)'
-                      }}
-                    >
-                      <div className={`w-full h-full border-2 ${option.borderColor} bg-gradient-to-br ${option.gradientColor} opacity-10`}
-                        style={{
-                          clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)'
-                        }}
-                      />
-                    </div>
-                    
-                    {/* Icon */}
-                    <div className={`absolute inset-0 flex items-center justify-center transition-all duration-300 ${
-                      isSelected ? 'scale-110 rotate-12' : 'group-hover:scale-105 group-hover:rotate-6'
-                    }`}>
-                      <Icon className={`w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-9 lg:h-9 ${option.iconColor} transition-all duration-300`} strokeWidth={2.5} />
-                    </div>
+                  {/* Icon */}
+                  <div className="mb-2 sm:mb-3 md:mb-4">
+                    <Icon className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 mx-auto text-gray-700" strokeWidth={1.5} />
                   </div>
 
                   {/* Title */}

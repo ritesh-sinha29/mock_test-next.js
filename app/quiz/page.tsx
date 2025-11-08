@@ -335,7 +335,7 @@ export default function QuizPage() {
                 animate={{ opacity: [0.5, 1, 0.5] }}
                 transition={{ duration: 2, repeat: Infinity }}
               >
-                Generating Your Quiz
+                Mock Test
               </motion.span>
             </h2>
             <p className="text-gray-600 text-base md:text-lg mb-4">Creating personalized questions...</p>
@@ -503,7 +503,7 @@ export default function QuizPage() {
               whileTap={{ scale: 0.98 }}
               className="w-full px-6 py-3 sm:py-3.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg sm:rounded-xl font-semibold text-sm sm:text-base shadow-lg hover:shadow-xl transition-all duration-300"
             >
-              I Understand - Start Test in Fullscreen
+              Start Mock Test
             </motion.button>
             
             <p className="text-xs sm:text-sm text-gray-500 text-center">
@@ -590,7 +590,7 @@ export default function QuizPage() {
                       Exiting fullscreen will end your test!
                     </p>
                     <p className="text-gray-600 text-sm md:text-base">
-                      Returning to fullscreen automatically...
+                      Returning to fullscreen ...
                     </p>
                   </div>
                 </motion.div>

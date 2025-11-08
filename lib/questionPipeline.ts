@@ -5,7 +5,7 @@ import { searchForCareerContent, getDifficultyFocus, generateUniqueSeed } from '
 
 const MAX_RETRIES = 2;
 const RETRY_DELAY = 500;
-const REQUEST_TIMEOUT = 60000; // 60 seconds
+const REQUEST_TIMEOUT = 30000; // 30 seconds
 
 class QuestionGenerationPipeline {
   private llm: ChatGroq;
@@ -23,8 +23,8 @@ class QuestionGenerationPipeline {
       this.llm = new ChatGroq({
         apiKey: apiKey,
         model: 'llama-3.3-70b-versatile', // Current supported model
-        temperature: 0.8, // Balanced temperature
-        maxTokens: 4096, // Limit tokens for faster response
+        temperature: 0.7, // Slightly lower for faster generation
+        maxTokens: 2500, // Reduced for faster response
       });
     } catch (error) {
       console.error('Failed to initialize Groq LLM:', error);
@@ -33,7 +33,13 @@ class QuestionGenerationPipeline {
 
     // Create prompt template for question generation
     this.promptTemplate = PromptTemplate.fromTemplate(`
-You are an expert quiz creator. Generate {count} unique multiple choice questions for {difficulty} level on "{careerPath}".
+You are an expert quiz creator. Generate {count} UNIQUE and DIFFERENT multiple choice questions specifically for "{careerPath}" at {difficulty} level.
+
+IMPORTANT: 
+- Every question MUST be directly relevant to "{careerPath}"
+- Questions MUST be completely different from previous generations
+- Use the seed value to ensure variety: {seed}
+- Cover different aspects, tools, concepts, and scenarios in "{careerPath}"
 
 {difficultyFocus}
 
@@ -42,10 +48,11 @@ You are an expert quiz creator. Generate {count} unique multiple choice question
 Question Requirements:
 - {difficulty} level appropriate
 - Each question: 4 options (A, B, C, D)
-- Career-relevant to {careerPath}
+- Highly relevant to "{careerPath}" career
 - Clear and unambiguous
 - Based on current industry standards and practices
-- Ensure variety in topics and question types
+- Cover diverse topics within "{careerPath}"
+- Include practical scenarios specific to "{careerPath}"
 
 Return ONLY valid JSON array:
 [
@@ -63,7 +70,8 @@ Return ONLY valid JSON array:
 ]
 
 No markdown, no explanations. JSON only.
-Unique Seed: {seed}
+Unique Seed for Variation: {seed}
+Career Focus: {careerPath}
     `);
   }
 
@@ -124,9 +132,18 @@ Unique Seed: {seed}
   ): Promise<Question[]> {
     let lastError: Error | null = null;
 
-    // Search web for career-specific content
-    console.log(`Searching web for ${difficulty} level ${careerPath} content...`);
-    const webContext = await searchForCareerContent(careerPath, difficulty);
+    // Start question generation immediately with a simple prompt if web search takes too long
+    console.log(`Starting question generation for ${difficulty} level ${careerPath}...`);
+    
+    // Try to get web context but don't wait too long
+    let webContext = '';
+    try {
+      console.log(`Fetching web content (3s timeout)...`);
+      webContext = await searchForCareerContent(careerPath, difficulty);
+    } catch (error) {
+      console.log('Web search skipped, proceeding with AI generation');
+      webContext = '';
+    }
     
     // Get difficulty-specific focus
     const difficultyFocus = getDifficultyFocus(difficulty);

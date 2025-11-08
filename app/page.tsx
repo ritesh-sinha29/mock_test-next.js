@@ -409,39 +409,32 @@ export default function DifficultySelectionPage() {
                   onClick={() => setSelectedDifficulty(option.level)}
                   whileHover={{ scale: 1.02, y: -2 }}
                   whileTap={{ scale: 0.98 }}
-                  className={`relative p-4 rounded-xl border-2 transition-all duration-300 group ${
-                    isSelected
-                      ? `${option.borderColor} bg-gradient-to-br ${option.gradientColor} shadow-lg`
-                      : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-md'
+                  className={`relative p-4 rounded-xl border-2 transition-all duration-300 group bg-white ${isSelected
+                      ? `${option.borderColor} shadow-lg`
+                      : 'border-slate-200 hover:border-slate-300 hover:shadow-md'
                   }`}
                 >
                   {/* Icon */}
                   <div className="mb-2.5">
                     <div className={`inline-flex p-2.5 rounded-lg transition-all duration-300 ${
                       isSelected 
-                        ? 'bg-white/20 backdrop-blur-sm' 
+                        ? 'bg-slate-50' 
                         : 'bg-slate-50 group-hover:bg-slate-100'
                     }`}>
                       <Icon 
-                        className={`w-8 h-8 transition-colors ${
-                          isSelected ? 'text-white' : 'text-slate-700'
-                        }`} 
+                        className="w-8 h-8 transition-colors text-slate-700" 
                         strokeWidth={1.8}
                       />
                     </div>
                   </div>
 
                   {/* Title */}
-                  <h3 className={`text-base sm:text-lg font-bold mb-1.5 transition-colors ${
-                    isSelected ? 'text-white' : 'text-slate-800'
-                  }`}>
+                  <h3 className="text-base sm:text-lg font-bold mb-1.5 transition-colors text-slate-800">
                     {option.title}
                   </h3>
 
                   {/* Description */}
-                  <p className={`text-xs leading-relaxed transition-colors ${
-                    isSelected ? 'text-white/90' : 'text-slate-600'
-                  }`}>
+                  <p className="text-xs leading-relaxed transition-colors text-slate-600">
                     {option.description}
                   </p>
 
